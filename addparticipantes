@@ -1,0 +1,25 @@
+const { Client, LocalAuth } = require('whatsapp-web.js');
+
+const client = new Client({
+    authStrategy: new LocalAuth(),
+});
+
+client.initialize();
+
+client.on('ready', () => {
+    console.log('Client is ready!');
+    
+    // Função para adicionar um contato a um grupo
+    async function addContactToGroup(groupId, contactId) {
+        const groupChat = await client.getChatById(groupId); // Obtém o chat do grupo pelo ID
+        await groupChat.addParticipants([contactId]); // Adiciona o contato ao grupo
+    }
+    
+    // ID do grupo e o contato que você quer adicionar (número deve incluir o código do país e ser seguido por @c.us)
+    const GROUP_ID = '123456789-123456@g.us';
+    const CONTACT_ID = '5511901234567@c.us'; // Exemplo de número do Brasil
+    
+    addContactToGroup(GROUP_ID, CONTACT_ID)
+        .then(() => console.log('Contact added to the group!'))
+        .catch(err => console.error('Failed to add contact to the group:', err));
+});

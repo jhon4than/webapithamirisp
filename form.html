@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Whatsapp Zinho</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Aplicando a fonte Poppins */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(43, 43, 43);
+            color: rgb(52, 236, 52);
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgb(52, 236, 52); /* 2px de largura, cor verde */
+            background-color: rgb(63, 63, 63);
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .rounded-input {
+            border: 2px solid rgb(52, 236, 52);
+            border-radius: 10px;
+            background-color: gray;
+            padding: 5px;
+            margin: 10px 0; /* Adicionando espaço vertical */
+            width: 100%;
+        }
+
+        .rounded-button {
+            border: 2px solid rgb(52, 236, 52);
+            border-radius: 10px;
+            background-color: gray;
+            color: white;
+            padding: 5px 10px;
+            margin: 10px 0; /* Adicionando espaço vertical */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="https://i.imgur.com/3KsUTtD.png"></h1>
+    <div class="container">
+        <h2>Adicionar Nova Pergunta e Resposta</h2>
+        <form action="/adicionar" method="post">
+            <label for="pergunta">Pergunta:</label>
+            <input type="text" id="pergunta" name="pergunta" class="rounded-input"><br>
+
+            <label for="resposta">Resposta:</label>
+            <input type="text" id="resposta" name="resposta" class="rounded-input"><br>
+
+            <input type="submit" value="Adicionar" class="rounded-button">
+        </form>
+    </div>
+</body>
+</html>

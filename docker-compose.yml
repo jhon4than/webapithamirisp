@@ -1,0 +1,11 @@
+version: '3'
+services:
+  bot:
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - GROUP_ID=120363195182514950@g.us
+    # ports: (opcional, caso seu app utilize HTTP)
+    #   - "3000:3000"

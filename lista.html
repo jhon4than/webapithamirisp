@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Perguntas e Respostas</title>
+</head>
+<body>
+    <h1>Lista de Perguntas e Respostas</h1>
+    <ul>
+        <% for (let i = 0; i < perguntasERespostas.length; i++) { %>
+            <li>
+                Pergunta: <%= perguntasERespostas[i].pergunta %><br>
+                Resposta: <%= perguntasERespostas[i].resposta %><br>
+                <form action="/excluir" method="post">
+                    <input type="hidden" name="perguntaParaExcluir" value="<%= perguntasERespostas[i].pergunta %>">
+                    <input type="submit" value="Excluir">
+                </form>
+            </li>
+        <% } %>
+    </ul>
+</body>
+</html>
