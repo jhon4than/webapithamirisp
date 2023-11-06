@@ -18,37 +18,53 @@ client.on("ready", () => {
 });
 
 function scheduleSignals() {
-    console.log("Agendando sinais para horários específicos com minutos definidos.");
+    console.log(
+        "Agendando sinais para horários específicos com minutos definidos."
+    );
 
-    // Define os horários exatos em que os sinais serão enviados
+    // Define os horários exatos em que os sinais serão enviados no horário de Brasília
     const signalTimes = [
         { hour: 6, minute: 2 },
         { hour: 9, minute: 2 },
-        { hour: 12, minute: 15 },
+        { hour: 12, minute: 4 },
         { hour: 15, minute: 5 },
         { hour: 18, minute: 7 },
-        { hour: 21, minute: 25 },
+        { hour: 21, minute: 2 },
         // ... Adicione mais horários conforme necessário
     ];
 
     signalTimes.forEach((time) => {
-        // O momento já está no fuso horário de São Paulo, então não é necessário converter
+        // Subtrai 3 da hora para ajustar ao horário da máquina, se necessário
+        let adjustedHour = time.hour - 3;
+
+        // Se a hora ajustada for negativa, ajusta para o dia anterior
+        if (adjustedHour < 0) {
+            adjustedHour += 24;
+        }
+
         schedule.scheduleJob(
             {
-                hour: time.hour,
+                hour: adjustedHour,
                 minute: time.minute,
             },
             function () {
-                console.log(`Enviando sinal para ${time.hour}:${time.minute} BRT.`);
+                console.log(
+                    `Enviando sinal para ${time.hour}:${time.minute} BRT.`
+                );
                 sendSignal(GROUP_ID);
             }
         );
     });
 
     // Agendar a mensagem de finalização para as 23 horas de Brasília
+    let adjustedEndHour = 23 - 3; // Ajustar para o horário da máquina
+    if (adjustedEndHour < 0) {
+        adjustedEndHour += 24;
+    }
+
     schedule.scheduleJob(
         {
-            hour: 23,
+            hour: adjustedEndHour,
             minute: 0,
         },
         function () {
@@ -57,7 +73,6 @@ function scheduleSignals() {
         }
     );
 }
-
 
 function sendSignal(chatId) {
     setTimeout(() => {
@@ -140,9 +155,8 @@ function generateRandomTimes() {
         }
     }
 
-    return times.join('\n');
+    return times.join("\n");
 }
-
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -151,9 +165,10 @@ function getRandomInt(min, max) {
 function formatTime(minutes) {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    return `${hours.toString().padStart(2, "0")}:${mins
+        .toString()
+        .padStart(2, "0")}`;
 }
-
 
 function sendEndOfDayMessage(chatId) {
     const endOfDayMessage = `✅🔥 FINALIZAMOS MAIS UM TURNO 100% POSITIVOOOOOOO
