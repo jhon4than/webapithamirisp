@@ -18,9 +18,8 @@ client.on("ready", () => {
 });
 
 function scheduleSignals() {
-    console.log(
-        "Agendando sinais para horários específicos com minutos definidos."
-    );
+    console.log("Agendando sinais para horários específicos com minutos definidos.");
+
     // Define os horários exatos em que os sinais serão enviados
     const signalTimes = [
         { hour: 6, minute: 2 },
@@ -33,38 +32,24 @@ function scheduleSignals() {
     ];
 
     signalTimes.forEach((time) => {
-        let localTime = moment
-            .tz(`${time.hour}:${time.minute}`, "HH:mm", "America/Sao_Paulo")
-            .tz("Etc/GMT-3") // ajuste para o fuso horário da máquina
-            .format("HH:mm")
-            .split(":");
-        console.log(localTime);
-
+        // O momento já está no fuso horário de São Paulo, então não é necessário converter
         schedule.scheduleJob(
             {
-                hour: parseInt(localTime[0], 10),
-                minute: parseInt(localTime[1], 10),
+                hour: time.hour,
+                minute: time.minute,
             },
             function () {
-                console.log(
-                    `Enviando sinal para ${time.hour}:${time.minute} BRT como ${localTime[0]}:${localTime[1]} hora local.`
-                );
+                console.log(`Enviando sinal para ${time.hour}:${time.minute} BRT.`);
                 sendSignal(GROUP_ID);
             }
         );
     });
 
     // Agendar a mensagem de finalização para as 23 horas de Brasília
-    let localEndTime = moment
-        .tz("23:00", "HH:mm", "America/Sao_Paulo")
-        .tz("Etc/GMT-3") // ajuste para o fuso horário da máquina
-        .format("HH:mm")
-        .split(":");
-
     schedule.scheduleJob(
         {
-            hour: parseInt(localEndTime[0], 10),
-            minute: parseInt(localEndTime[1], 10),
+            hour: 23,
+            minute: 0,
         },
         function () {
             console.log("Enviando mensagem de finalização do dia.");
@@ -72,6 +57,7 @@ function scheduleSignals() {
         }
     );
 }
+
 
 function sendSignal(chatId) {
     setTimeout(() => {
