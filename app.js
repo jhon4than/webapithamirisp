@@ -17,6 +17,13 @@ client.on("ready", () => {
     scheduleSignals(); // Agendar os sinais para serem enviados
 });
 
+// Verifica a data e hora atuais
+function checkCurrentTime() {
+    const now = new Date(); // Cria um novo objeto Date, que possui a data e hora atuais
+    const currentTime = now.toISOString(); // Converte para uma string no formato ISO para fácil leitura
+    console.log(`A data e hora atuais são: ${currentTime}`);
+}
+
 function scheduleSignals() {
     console.log(
         "Agendando sinais para horários específicos com minutos definidos."
@@ -37,6 +44,8 @@ function scheduleSignals() {
         // Subtrai 3 da hora para ajustar ao horário da máquina, se necessário
         let adjustedHour = time.hour - 3;
         console.log(adjustedHour);
+        // Chame a função para verificar a data e hora
+        checkCurrentTime();
         console.log(signalTimes);
         // Se a hora ajustada for negativa, ajusta para o dia anterior
         if (adjustedHour < 0) {
