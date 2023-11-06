@@ -36,7 +36,8 @@ function scheduleSignals() {
     signalTimes.forEach((time) => {
         // Subtrai 3 da hora para ajustar ao horário da máquina, se necessário
         let adjustedHour = time.hour - 3;
-
+        console.log(adjustedHour);
+        console.log(signalTimes);
         // Se a hora ajustada for negativa, ajusta para o dia anterior
         if (adjustedHour < 0) {
             adjustedHour += 24;
