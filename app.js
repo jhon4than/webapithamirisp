@@ -29,7 +29,7 @@ function scheduleSignals() {
         "Agendando sinais para horários específicos com minutos definidos."
     );
 
-    // Define os horários exatos em que os sinais serão enviados no horário de Brasília
+    // Horários em que os sinais serão enviados, no horário de Brasília
     const signalTimes = [
         { hour: 6, minute: 2 },
         { hour: 9, minute: 2 },
@@ -37,25 +37,18 @@ function scheduleSignals() {
         { hour: 15, minute: 5 },
         { hour: 18, minute: 7 },
         { hour: 21, minute: 2 },
-        // ... Adicione mais horários conforme necessário
     ];
 
     signalTimes.forEach((time) => {
-        // Subtrai 3 da hora para ajustar ao horário da máquina, se necessário
-        let adjustedHour = time.hour - 3;
-        console.log(adjustedHour);
-        // Chame a função para verificar a data e hora
-        checkCurrentTime();
-        console.log(signalTimes);
-        // Se a hora ajustada for negativa, ajusta para o dia anterior
-        if (adjustedHour < 0) {
-            adjustedHour += 24;
-        }
-
+        // Converte o horário de Brasília para o fuso horário local do servidor
+        const timeInLocal = moment
+            .tz({ hour: time.hour, minute: time.minute }, "America/Sao_Paulo")
+            .local();
+        console.log(timeInLocal);
         schedule.scheduleJob(
             {
-                hour: adjustedHour,
-                minute: time.minute,
+                hour: timeInLocal.get("hour"),
+                minute: timeInLocal.get("minute"),
             },
             function () {
                 console.log(
@@ -67,15 +60,14 @@ function scheduleSignals() {
     });
 
     // Agendar a mensagem de finalização para as 23 horas de Brasília
-    let adjustedEndHour = 23 - 3; // Ajustar para o horário da máquina
-    if (adjustedEndHour < 0) {
-        adjustedEndHour += 24;
-    }
+    const endOfDayInLocal = moment
+        .tz({ hour: 23, minute: 0 }, "America/Sao_Paulo")
+        .local();
 
     schedule.scheduleJob(
         {
-            hour: adjustedEndHour,
-            minute: 0,
+            hour: endOfDayInLocal.get("hour"),
+            minute: endOfDayInLocal.get("minute"),
         },
         function () {
             console.log("Enviando mensagem de finalização do dia.");
