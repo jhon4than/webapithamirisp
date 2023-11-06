@@ -5,6 +5,8 @@ const moment = require("moment-timezone");
 
 const GROUP_ID = "120363177352256950@g.us";
 const SIGNAL_IMAGE_PATH = "./sinal.jpg"; // Caminho para a imagem do sinal
+const SIGNAL_JUNTO_IMAGE_PATH = "./juntosinal.jpg"; // Caminho para a imagem do sinal
+const SIGNAL_DUAS_IMAGE_PATH = "./aleatorio.jpg";
 
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -14,15 +16,9 @@ client.initialize();
 
 client.on("ready", () => {
     console.log("Bot Online!");
-    scheduleSignals(); // Agendar os sinais para serem enviados
+    scheduleSignals(); // Agendar os sinais regulares para serem enviados
+    scheduleRandomSignals(); // Agendar os sinais aleatórios para serem enviados
 });
-
-// Verifica a data e hora atuais
-function checkCurrentTime() {
-    const now = new Date(); // Cria um novo objeto Date, que possui a data e hora atuais
-    const currentTime = now.toISOString(); // Converte para uma string no formato ISO para fácil leitura
-    console.log(`A data e hora atuais são: ${currentTime}`);
-}
 
 function scheduleSignals() {
     console.log(
@@ -35,7 +31,7 @@ function scheduleSignals() {
         { hour: 9, minute: 2 },
         { hour: 12, minute: 4 },
         { hour: 15, minute: 5 },
-        { hour: 18, minute: 7 },
+        { hour: 18, minute: 3 },
         { hour: 21, minute: 2 },
     ];
 
@@ -96,9 +92,15 @@ function sendSignal(chatId) {
 }
 
 function sendMinutePayingMessage(chatId) {
-    const randomTimes = generateRandomTimes();
+    client
+        .getChatById(chatId)
+        .then((chat) => {
+            const mentions = chat.participants
+                .filter((participant) => !participant.isMe) // Filtrar o próprio bot
+                .map((participant) => participant.id._serialized); // Mapear para uma lista de IDs serializados
 
-    const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!!!!!*🚨
+            const randomTimes = generateRandomTimes();
+            const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!!!!!*🚨
     
 HORÁRIO DE BRASÍLIA
 ✅ SINAL VALIDO SOMENTE DENTRO DO MINUTO ✅
@@ -125,8 +127,31 @@ Sinais enviados AO VIVO pelos meus analistas de jogos de slots. 📊💲⚠🤑
 
 ➡ https://appinteligente.com/cadastro-pixhoje`;
 
-    console.log("Enviando mensagem de minutos pagantes.");
-    client.sendMessage(chatId, message);
+            const signalImageJunto = MessageMedia.fromFilePath(
+                SIGNAL_JUNTO_IMAGE_PATH
+            );
+
+            // Enviar a mensagem com as menções
+            client
+                .sendMessage(chatId, signalImageJunto, {
+                    caption: message,
+                    mentions: mentions,
+                })
+                .then(() => {
+                    console.log(
+                        "Mensagem de minutos pagantes enviada com menções."
+                    );
+                })
+                .catch((err) =>
+                    console.error(
+                        "Erro ao enviar mensagem de minutos pagantes:",
+                        err
+                    )
+                );
+        })
+        .catch((err) =>
+            console.error("Erro ao obter chat para minutos pagantes:", err)
+        );
 }
 
 function generateRandomTimes() {
@@ -149,7 +174,7 @@ function generateRandomTimes() {
         }
         let timeString = formatTime(baseTime);
         times.push(`✅ ${timeString} 🕛`);
-        baseTime += getRandomInt(5, 7); // Adiciona um intervalo aleatório entre 5 e 7 minutos
+        baseTime += getRandomInt(7, 9); // Adiciona um intervalo aleatório entre 5 e 7 minutos
 
         // Verifica se a próxima baseTime ultrapassará 23 horas e para se necessário
         if (baseTime >= endTime) {
@@ -192,6 +217,46 @@ function sendEndOfDayMessage(chatId) {
     ✅ MANDA SEU FEEDBACK COM O SEU RESULTADO!!!! No insta https://www.instagram.com/_thamiresmoura/`;
 
     client.sendMessage(chatId, endOfDayMessage);
+}
+function scheduleRandomSignals() {
+    const randomSignalTimes = generateTwoRandomTimes();
+
+    randomSignalTimes.forEach((time) => {
+        schedule.scheduleJob(
+            {
+                hour: time.hour,
+                minute: time.minute,
+            },
+            function () {
+                console.log(
+                    `Enviando sinal aleatório para ${time.hour}:${time.minute} BRT.`
+                );
+                sendRandomSignal(GROUP_ID);
+            }
+        );
+    });
+}
+
+function sendRandomSignal(chatId) {
+    const signalImage = MessageMedia.fromFilePath(SIGNAL_DUAS_IMAGE_PATH);
+    const message = ""; // Sua mensagem aqui
+
+    client
+        .sendMessage(chatId, signalImage, { caption: message })
+        .then(() => {
+            console.log("Sinal aleatório enviado.");
+        })
+        .catch((err) => console.error("Erro ao enviar sinal aleatório:", err));
+}
+
+function generateTwoRandomTimes() {
+    const randomTimes = [];
+    for (let i = 0; i < 2; i++) {
+        const randomHour = getRandomInt(8, 20); // Horas entre 8 e 20
+        const randomMinute = getRandomInt(0, 59); // Minutos entre 0 e 59
+        randomTimes.push({ hour: randomHour, minute: randomMinute });
+    }
+    return randomTimes;
 }
 
 client.on("qr", (qr) => {
