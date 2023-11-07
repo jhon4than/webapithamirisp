@@ -17,7 +17,7 @@ client.initialize();
 client.on("ready", () => {
     console.log("Bot Online!");
     scheduleSignals(); // Agendar os sinais regulares para serem enviados
-    scheduleRandomSignals(); // Agendar os sinais aleatórios para serem enviados
+    scheduleRandomMessages(GROUP_ID, SIGNAL_DUAS_IMAGE_PATH); // Agendar os sinais aleatórios para serem enviados
 });
 
 function scheduleSignals() {
@@ -184,8 +184,6 @@ function generateRandomTimes() {
     return times.join("\n");
 }
 
-
-
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -219,28 +217,51 @@ function sendEndOfDayMessage(chatId) {
 
     client.sendMessage(chatId, endOfDayMessage);
 }
-function scheduleRandomSignals() {
-    const randomSignalTimes = generateTwoRandomTimes();
+function scheduleRandomMessages(chatId, imagePath) {
+    const randomTimes = generateTwoRandomTimes();
 
-    randomSignalTimes.forEach((time) => {
-        schedule.scheduleJob(
-            {
-                hour: time.hour,
-                minute: time.minute,
-            },
-            function () {
-                console.log(
-                    `Enviando sinal aleatório para ${time.hour}:${time.minute} BRT.`
-                );
-                sendRandomSignal(GROUP_ID);
-            }
+    // Ordena os horários para garantir que o primeiro sempre venha antes do segundo
+    randomTimes.sort((a, b) =>
+        a.hour !== b.hour ? a.hour - b.hour : a.minute - b.minute
+    );
+
+    randomTimes.forEach((time, index) => {
+        // Converte os horários para milissegundos
+        const now = new Date();
+        const targetTime = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            time.hour,
+            time.minute
         );
+
+        // Se o horário já passou, agende para o próximo dia
+        if (targetTime.getTime() < now.getTime()) {
+            targetTime.setDate(targetTime.getDate() + 1);
+        }
+
+        // Calcula o atraso em milissegundos
+        const delay = targetTime.getTime() - now.getTime();
+
+        // Agenda o envio da mensagem
+        setTimeout(() => {
+            sendRandomSignal(chatId, imagePath);
+        }, delay);
+
+        // Se for o primeiro horário, agende também o segundo horário com um atraso adicional
+        if (index === 0) {
+            const additionalDelay = 1000 * 60 * 60; // 1 hora em milissegundos, por exemplo
+            setTimeout(() => {
+                sendRandomSignal(chatId, imagePath);
+            }, delay + additionalDelay);
+        }
     });
 }
 
-function sendRandomSignal(chatId) {
-    const signalImage = MessageMedia.fromFilePath(SIGNAL_DUAS_IMAGE_PATH);
-    const message = ""; // Sua mensagem aqui
+function sendRandomSignal(chatId, imagePath) {
+    const signalImage = MessageMedia.fromFilePath(imagePath);
+    const message = "Mensagem aleatória do dia"; // Sua mensagem aqui
 
     client
         .sendMessage(chatId, signalImage, { caption: message })
@@ -253,7 +274,7 @@ function sendRandomSignal(chatId) {
 function generateTwoRandomTimes() {
     const randomTimes = [];
     for (let i = 0; i < 2; i++) {
-        const randomHour = getRandomInt(8, 20); // Horas entre 8 e 20
+        const randomHour = getRandomInt(15, 23); // Horas entre 8 e 20
         const randomMinute = getRandomInt(0, 59); // Minutos entre 0 e 59
         randomTimes.push({ hour: randomHour, minute: randomMinute });
     }
