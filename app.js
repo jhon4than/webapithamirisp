@@ -31,7 +31,7 @@ function scheduleSignals() {
         { hour: 10, minute: 2 },
         { hour: 13, minute: 4 },
         { hour: 16, minute: 5 },
-        { hour: 19, minute: 3 },
+        { hour: 19, minute: 34 },
     ];
 
     signalTimes.forEach((time) => {
@@ -160,17 +160,16 @@ Sinais enviados AO VIVO pelos meus analistas de jogos de slots. 📊💲⚠🤑
 function generateRandomTimes() {
     let times = [];
     const currentTime = moment().tz("America/Sao_Paulo");
-    const endTime = currentTime.clone().add(3, 'hours'); // Definir o horário final como 3 horas a partir de agora
+    const endTime = currentTime.clone().add(3, "hours"); // Definir o horário final como 3 horas a partir de agora
 
     while (currentTime.isBefore(endTime)) {
-        let timeString = currentTime.format('HH:mm'); // Formatar o horário atual
+        let timeString = currentTime.format("HH:mm"); // Formatar o horário atual
         times.push(`✅ ${timeString} 🕛`);
-        currentTime.add(getRandomInt(7, 9), 'minutes'); // Adicionar um intervalo aleatório de 7 a 9 minutos
+        currentTime.add(getRandomInt(7, 9), "minutes"); // Adicionar um intervalo aleatório de 7 a 9 minutos
     }
 
     return times.join("\n");
 }
-
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
