@@ -27,12 +27,12 @@ function scheduleSignals() {
 
     // Horários em que os sinais serão enviados, no horário de Brasília
     const signalTimes = [
-        { hour: 6, minute: 2 },
-        { hour: 9, minute: 2 },
-        { hour: 12, minute: 4 },
-        { hour: 15, minute: 5 },
-        { hour: 18, minute: 3 },
-        { hour: 21, minute: 2 },
+        { hour: 7, minute: 2 },
+        { hour: 10, minute: 2 },
+        { hour: 13, minute: 4 },
+        { hour: 16, minute: 5 },
+        { hour: 19, minute: 3 },
+        { hour: 22, minute: 2 },
     ];
 
     signalTimes.forEach((time) => {
@@ -161,29 +161,30 @@ function generateRandomTimes() {
     let baseTime = currentTime.hour() * 60 + baseMinute; // Convertendo para minutos
 
     const endTime = 23 * 60; // 23 horas convertidas em minutos
+    const startTime = 8 * 60; // 8 horas da manhã convertidas em minutos
 
-    // Verifica se já passou das 23 horas. Se sim, não gera novos tempos.
+    // Se já passou das 23 horas, define o baseTime para o horário inicial do dia seguinte
     if (baseTime >= endTime) {
-        return times;
-    }
+        baseTime = startTime;
+    } else {
+        // Verifica se o baseTime atual não ultrapassa o endTime
+        while (baseTime < endTime) {
+            let timeString = formatTime(baseTime);
+            times.push(`✅ ${timeString} 🕛`);
+            // Adiciona um intervalo aleatório entre 7 e 9 minutos
+            baseTime += getRandomInt(7, 9);
 
-    // Calcular quantos sinais são necessários para cobrir até as 23 horas
-    while (baseTime < endTime) {
-        if (baseTime >= 60 * 24) {
-            baseTime -= 60 * 24; // Se passar de meia-noite, ajusta para continuar a contagem
-        }
-        let timeString = formatTime(baseTime);
-        times.push(`✅ ${timeString} 🕛`);
-        baseTime += getRandomInt(7, 9); // Adiciona um intervalo aleatório entre 5 e 7 minutos
-
-        // Verifica se a próxima baseTime ultrapassará 23 horas e para se necessário
-        if (baseTime >= endTime) {
-            break;
+            // Se a próxima baseTime ultrapassará 23 horas, para o loop
+            if (baseTime >= endTime) {
+                break;
+            }
         }
     }
 
     return times.join("\n");
 }
+
+
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
