@@ -32,7 +32,6 @@ function scheduleSignals() {
         { hour: 13, minute: 4 },
         { hour: 16, minute: 5 },
         { hour: 19, minute: 3 },
-        { hour: 22, minute: 2 },
     ];
 
     signalTimes.forEach((time) => {
@@ -40,19 +39,23 @@ function scheduleSignals() {
         const timeInLocal = moment
             .tz({ hour: time.hour, minute: time.minute }, "America/Sao_Paulo")
             .local();
-        console.log(timeInLocal);
-        schedule.scheduleJob(
-            {
-                hour: timeInLocal.get("hour"),
-                minute: timeInLocal.get("minute"),
-            },
-            function () {
-                console.log(
-                    `Enviando sinal para ${time.hour}:${time.minute} BRT.`
-                );
-                sendSignal(GROUP_ID);
-            }
-        );
+
+        // Verifica se o horário é antes das 23 horas
+        if (timeInLocal.hour() < 23) {
+            console.log(timeInLocal);
+            schedule.scheduleJob(
+                {
+                    hour: timeInLocal.get("hour"),
+                    minute: timeInLocal.get("minute"),
+                },
+                function () {
+                    console.log(
+                        `Enviando sinal para ${time.hour}:${time.minute} BRT.`
+                    );
+                    sendSignal(GROUP_ID);
+                }
+            );
+        }
     });
 
     // Agendar a mensagem de finalização para as 23 horas de Brasília
@@ -157,32 +160,17 @@ Sinais enviados AO VIVO pelos meus analistas de jogos de slots. 📊💲⚠🤑
 function generateRandomTimes() {
     let times = [];
     const currentTime = moment().tz("America/Sao_Paulo");
-    let baseMinute = currentTime.minute() + 20; // Começa 20 minutos após a hora atual
-    let baseTime = currentTime.hour() * 60 + baseMinute; // Convertendo para minutos
+    const endTime = currentTime.clone().add(3, 'hours'); // Definir o horário final como 3 horas a partir de agora
 
-    const endTime = 23 * 60; // 23 horas convertidas em minutos
-    const startTime = 8 * 60; // 8 horas da manhã convertidas em minutos
-
-    // Se já passou das 23 horas, define o baseTime para o horário inicial do dia seguinte
-    if (baseTime >= endTime) {
-        baseTime = startTime;
-    } else {
-        // Verifica se o baseTime atual não ultrapassa o endTime
-        while (baseTime < endTime) {
-            let timeString = formatTime(baseTime);
-            times.push(`✅ ${timeString} 🕛`);
-            // Adiciona um intervalo aleatório entre 7 e 9 minutos
-            baseTime += getRandomInt(7, 9);
-
-            // Se a próxima baseTime ultrapassará 23 horas, para o loop
-            if (baseTime >= endTime) {
-                break;
-            }
-        }
+    while (currentTime.isBefore(endTime)) {
+        let timeString = currentTime.format('HH:mm'); // Formatar o horário atual
+        times.push(`✅ ${timeString} 🕛`);
+        currentTime.add(getRandomInt(7, 9), 'minutes'); // Adicionar um intervalo aleatório de 7 a 9 minutos
     }
 
     return times.join("\n");
 }
+
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -261,7 +249,7 @@ function scheduleRandomMessages(chatId, imagePath) {
 
 function sendRandomSignal(chatId, imagePath) {
     const signalImage = MessageMedia.fromFilePath(imagePath);
-    const message = "Mensagem aleatória do dia"; // Sua mensagem aqui
+    const message = ""; // Sua mensagem aqui
 
     client
         .sendMessage(chatId, signalImage, { caption: message })
