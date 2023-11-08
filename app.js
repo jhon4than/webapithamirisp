@@ -31,7 +31,7 @@ function scheduleSignals() {
         { hour: 10, minute: 2 },
         { hour: 13, minute: 4 },
         { hour: 16, minute: 5 },
-        { hour: 19, minute: 34 },
+        { hour: 19, minute: 25 },
     ];
 
     signalTimes.forEach((time) => {
@@ -205,45 +205,30 @@ function sendEndOfDayMessage(chatId) {
     client.sendMessage(chatId, endOfDayMessage);
 }
 function scheduleRandomMessages(chatId, imagePath) {
-    const randomTimes = generateTwoRandomTimes();
+    const [time] = generateTwoRandomTimes(); // Agora gera apenas um horário
 
-    // Ordena os horários para garantir que o primeiro sempre venha antes do segundo
-    randomTimes.sort((a, b) =>
-        a.hour !== b.hour ? a.hour - b.hour : a.minute - b.minute
+    // Converte o horário para milissegundos
+    const now = new Date();
+    const targetTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        time.hour,
+        time.minute
     );
 
-    randomTimes.forEach((time, index) => {
-        // Converte os horários para milissegundos
-        const now = new Date();
-        const targetTime = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            time.hour,
-            time.minute
-        );
+    // Se o horário já passou, agende para o próximo dia
+    if (targetTime.getTime() < now.getTime()) {
+        targetTime.setDate(targetTime.getDate() + 1);
+    }
 
-        // Se o horário já passou, agende para o próximo dia
-        if (targetTime.getTime() < now.getTime()) {
-            targetTime.setDate(targetTime.getDate() + 1);
-        }
+    // Calcula o atraso em milissegundos
+    const delay = targetTime.getTime() - now.getTime();
 
-        // Calcula o atraso em milissegundos
-        const delay = targetTime.getTime() - now.getTime();
-
-        // Agenda o envio da mensagem
-        setTimeout(() => {
-            sendRandomSignal(chatId, imagePath);
-        }, delay);
-
-        // Se for o primeiro horário, agende também o segundo horário com um atraso adicional
-        if (index === 0) {
-            const additionalDelay = 1000 * 60 * 60; // 1 hora em milissegundos, por exemplo
-            setTimeout(() => {
-                sendRandomSignal(chatId, imagePath);
-            }, delay + additionalDelay);
-        }
-    });
+    // Agenda o envio da mensagem uma vez
+    setTimeout(() => {
+        sendRandomSignal(chatId, imagePath);
+    }, delay);
 }
 
 function sendRandomSignal(chatId, imagePath) {
@@ -259,13 +244,10 @@ function sendRandomSignal(chatId, imagePath) {
 }
 
 function generateTwoRandomTimes() {
-    const randomTimes = [];
-    for (let i = 0; i < 2; i++) {
-        const randomHour = getRandomInt(15, 23); // Horas entre 8 e 20
-        const randomMinute = getRandomInt(0, 59); // Minutos entre 0 e 59
-        randomTimes.push({ hour: randomHour, minute: randomMinute });
-    }
-    return randomTimes;
+    // Gera apenas um horário aleatório
+    const randomHour = getRandomInt(0, 23); // Horas entre 0 e 23
+    const randomMinute = getRandomInt(0, 59); // Minutos entre 0 e 59
+    return [{ hour: randomHour, minute: randomMinute }];
 }
 
 client.on("qr", (qr) => {
