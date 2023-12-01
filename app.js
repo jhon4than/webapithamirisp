@@ -3,7 +3,7 @@ const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 const schedule = require("node-schedule");
 const moment = require("moment-timezone");
 
-const GROUP_ID = "120363177352256950@g.us";
+const GROUP_ID = "120363199599521035@g.us";
 const SIGNAL_IMAGE_PATH = "./sinal.jpg"; // Caminho para a imagem do sinal
 const SIGNAL_JUNTO_IMAGE_PATH = "./juntosinal.jpg"; // Caminho para a imagem do sinal
 const SIGNAL_DUAS_IMAGE_PATH = "./aleatorio.jpg";
@@ -259,9 +259,9 @@ function generateTwoRandomTimes() {
     return [{ hour: randomHour, minute: randomMinute }];
 }
 
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//     qrcode.generate(qr, { small: true });
+// });
 
 // client.on('ready', () => {
 //     console.log('Client is ready!');
