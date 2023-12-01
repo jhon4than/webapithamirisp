@@ -17,7 +17,6 @@ client.initialize();
 client.on("ready", () => {
     console.log("Bot Online!");
     scheduleSignals(); // Agendar os sinais regulares para serem enviados
-    scheduleRandomMessages(GROUP_ID, SIGNAL_DUAS_IMAGE_PATH); // Agendar os sinais aleatórios para serem enviados
 });
 
 function scheduleSignals() {
@@ -27,11 +26,11 @@ function scheduleSignals() {
 
     // Horários em que os sinais serão enviados, no horário de Brasília
     const signalTimes = [
-        { hour: 7, minute: 2 },
-        { hour: 10, minute: 2 },
-        { hour: 13, minute: 4 },
-        { hour: 16, minute: 5 },
-        { hour: 19, minute: 25 },
+        { hour: 9, minute: 2 },
+        { hour: 12, minute: 2 },
+        { hour: 15, minute: 4 },
+        { hour: 18, minute: 5 },
+        { hour: 21, minute: 25 },
     ];
 
     signalTimes.forEach((time) => {
@@ -79,7 +78,7 @@ function sendSignal(chatId) {
     setTimeout(() => {
         const signalImage = MessageMedia.fromFilePath(SIGNAL_IMAGE_PATH);
         const preSignalMessage =
-            "👑 ATENÇÃO... IDENTIFICANDO PADRÕES🔎❗\n📊 ANALISANDO ALGORITMO...\n🎰 CADASTRE-SE AQUI:https://appinteligente.com/cadastro-pixhoje";
+            "👑 ATENÇÃO... IDENTIFICANDO PADRÕES🔎❗\n📊 ANALISANDO ALGORITMO...\n🎰 CADASTRE-SE AQUI:https://fwd.cx/lvndeS58ksIX";
         console.log("Enviando mensagem de pré-sinal.");
         client
             .sendMessage(chatId, signalImage, { caption: preSignalMessage })
@@ -103,32 +102,36 @@ function sendMinutePayingMessage(chatId) {
                 .map((participant) => participant.id._serialized); // Mapear para uma lista de IDs serializados
 
             const randomTimes = generateRandomTimes();
-            const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!!!!!*🚨
+            const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!*🚨
     
 HORÁRIO DE BRASÍLIA
-✅ SINAL VALIDO SOMENTE DENTRO DO MINUTO ✅
+✅SINAL VALIDO SOMENTE DENTRO DO MINUTO✅
 ➖➖➖➖➖➖➖➖➖➖➖➖
 ➡ SE CADASTRE PARA JOGAR
 🚨DEPOSITE QUALQUER VALOR PARA CONSEGUIR FAZER DE 400 A 500 POR DIA
 ▶Quanto maior o valor de depósito + você consegue lucrar
 
-       👇 PLATAFORMA QUE MAIS PAGA 👇
-➡ https://appinteligente.com/cadastro-pixhoje
+    👇 PLATAFORMA QUE MAIS PAGA 👇
+➡ https://fwd.cx/lvndeS58ksIX
 
-🎰 SLOTS: Tigre, Touro, Rato e Coelho.
+🎰 Qual jogo você pode usar?
+Fortune Tiger 🐯,
+Fortune Rabbit 🐰
+Fortune Ox 🐂
+Fortune Mouse 🐭
 
-📣‼Casa de aposta PIXHOJE.NET ✅ ‼📣
+📣‼Casa de aposta Realsbet ✅ ‼📣
 ${randomTimes}
 
 🐌 4x Normal 
 ⚡ 7x Turbo 
 
-Sinais enviados AO VIVO pelos meus analistas de jogos de slots. 📊💲⚠🤑
+Sinais enviados AO VIVO por mim Yuri Analista de jogos de slots. 📊💲⚠🤑
 
 ➖➖➖➖➖➖➖➖➖➖➖
-🔔 FAZ O CADASTRO DENTRO DA CASA DE APOSTA 👇🏻
+🔔 FAZER O CADASTRO DENTRO DA CASA DE APOSTA 👇🏻
 
-➡ https://appinteligente.com/cadastro-pixhoje`;
+➡ https://fwd.cx/lvndeS58ksIX`;
 
             const signalImageJunto = MessageMedia.fromFilePath(
                 SIGNAL_JUNTO_IMAGE_PATH
@@ -164,7 +167,7 @@ function generateRandomTimes() {
 
     while (currentTime.isBefore(endTime)) {
         let timeString = currentTime.format("HH:mm"); // Formatar o horário atual
-        times.push(`✅ ${timeString} 🕛`);
+        times.push(`✅⏰ ${timeString}`);
         currentTime.add(getRandomInt(7, 9), "minutes"); // Adicionar um intervalo aleatório de 7 a 9 minutos
     }
 
@@ -184,23 +187,29 @@ function formatTime(minutes) {
 }
 
 function sendEndOfDayMessage(chatId) {
-    const endOfDayMessage = `✅🔥 FINALIZAMOS MAIS UM TURNO 100% POSITIVOOOOOOO
+    const endOfDayMessage = `✅🔥 FINALIZAMOS MAIS UM TURNO POSITIVOOOOOOO!!!
 
     💰COMO PEGAR NOSSOS SINAIS E FAZER DE R$ 100 A R$ 500 POR DIA💰
     
     PASSO 1: SE CADASTRE NA CASA DE APOSTAS:
     
-    ➡ https://pixhoje.net
+    ➡ https://fwd.cx/lvndeS58ksIX
     
-    PASSO 2: DEPOSITE A PARTIR DE R$ 25,00
+    PASSO 2: DEPOSITE A PARTIR DE R$ 30,00
     
     PASSO 3: PEGUE OS SINAIS NO MINUTO EXATO!!
     
     BANCAS QUE MAIS ESTÃO LUCRANDO:
-    🥇R$100,00
-    🥈R$50,00
+    🥇R$50,00
+    🥈R$40,00
+    🥉R$30,00
+
+    NÃO SE ESQUEÇA, SE VOCÊ REALMENTE QUER LUCRAR  
+    SEMPRE FAÇA GERENCIAMENTO DE BANCA!!
+
+    ✅ QUEM AÍ LUCROU?? MANDA SEU FEEDBACK NO MEU PRIVADO!!!!
     
-    ✅ MANDA SEU FEEDBACK COM O SEU RESULTADO!!!! No insta https://www.instagram.com/_thamiresmoura/`;
+    😉 Ficou com dúvida? Me chame no Privado, nossa equipe irá te ajudar`;
 
     client.sendMessage(chatId, endOfDayMessage);
 }
