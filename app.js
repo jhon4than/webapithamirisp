@@ -2,6 +2,7 @@ const qrcode = require("qrcode-terminal");
 const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 const schedule = require("node-schedule");
 const moment = require("moment-timezone");
+const botActive = { value: true };
 
 const GROUP_ID = "120363207227880718@g.us";
 
@@ -13,8 +14,16 @@ client.initialize();
 
 client.on("ready", () => {
     console.log("Bot Online!");
-    scheduleSignals(); // Agendar os sinais regulares para serem enviados
+    scheduleSignals();
+    
+    // Agendar a "pausa" para 30 dias a partir de agora
+    setTimeout(() => {
+        console.log("Bot está agora em pausa.");
+        botActive.value = false;
+    }, 30 * 24 * 60 * 60 * 1000); // 30 dias em milissegundos
 });
+
+
 
 function scheduleSignals() {
     console.log("Agendando sinais para horários específicos com minutos definidos.");
@@ -45,10 +54,13 @@ function scheduleSignals() {
     });
 }
 
+// Agora, em suas funções que enviam mensagens, você deve verificar se o bot está ativo
 function sendSignal(chatId) {
-   
+    if (botActive.value) {
         sendMinutePayingMessage(chatId);
-   
+    } else {
+        console.log("Bot está pausado e não pode enviar sinais.");
+    }
 }
 
 function sendMinutePayingMessage(chatId) {
@@ -192,9 +204,9 @@ function generateTwoRandomTimes() {
     return [{ hour: randomHour, minute: randomMinute }];
 }
 
-// client.on("qr", (qr) => {
-//     qrcode.generate(qr, { small: true });
-// });
+client.on("qr", (qr) => {
+    qrcode.generate(qr, { small: true });
+});
 
 // client.on("ready", () => {
 //     console.log("Client is ready!");
