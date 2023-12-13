@@ -5,8 +5,6 @@ const moment = require("moment-timezone");
 
 const GROUP_ID = "120363199599521035@g.us";
 const SIGNAL_IMAGE_PATH = "./sinal.jpg"; // Caminho para a imagem do sinal
-const SIGNAL_JUNTO_IMAGE_PATH = "./juntosinal.jpg"; // Caminho para a imagem do sinal
-const SIGNAL_DUAS_IMAGE_PATH = "./aleatorio.jpg";
 
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -14,10 +12,10 @@ const client = new Client({
 
 client.initialize();
 
-client.on("ready", () => {
-    console.log("Bot Online!");
-    scheduleSignals(); // Agendar os sinais regulares para serem enviados
-});
+// client.on("ready", () => {
+//     console.log("Bot Online!");
+//     scheduleSignals(); // Agendar os sinais regulares para serem enviados
+// });
 
 function scheduleSignals() {
     console.log(
@@ -27,8 +25,7 @@ function scheduleSignals() {
     // Horários em que os sinais serão enviados, no horário de Brasília
     const signalTimes = [
         { hour: 9, minute: 2 },
-        { hour: 12, minute: 2 },
-        { hour: 15, minute: 4 },
+        { hour: 13, minute: 2 },
         { hour: 18, minute: 5 },
         { hour: 21, minute: 25 },
     ];
@@ -76,20 +73,7 @@ function scheduleSignals() {
 
 function sendSignal(chatId) {
     setTimeout(() => {
-        const signalImage = MessageMedia.fromFilePath(SIGNAL_IMAGE_PATH);
-        const preSignalMessage =
-            "👑 ATENÇÃO... IDENTIFICANDO PADRÕES🔎❗\n📊 ANALISANDO ALGORITMO...\n🎰 CADASTRE-SE AQUI:https://fwd.cx/lvndeS58ksIX";
-        console.log("Enviando mensagem de pré-sinal.");
-        client
-            .sendMessage(chatId, signalImage, { caption: preSignalMessage })
-            .then(() => {
-                console.log(
-                    "Mensagem de pré-sinal enviada. Preparando para enviar a imagem do sinal."
-                );
-                setTimeout(() => {
-                    sendMinutePayingMessage(chatId);
-                }, 60000); // Enviar mensagem após 10 segundos da imagem do sinal
-            });
+        sendMinutePayingMessage(chatId);
     }, 1000); // Aguarda um segundo após a mensagem de pré-sinal para enviar a imagem
 }
 
@@ -103,43 +87,22 @@ function sendMinutePayingMessage(chatId) {
 
             const randomTimes = generateRandomTimes();
             const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!*🚨
-    
 HORÁRIO DE BRASÍLIA
 ✅SINAL VALIDO SOMENTE DENTRO DO MINUTO✅
 ➖➖➖➖➖➖➖➖➖➖➖➖
-➡ SE CADASTRE PARA JOGAR
-🚨DEPOSITE QUALQUER VALOR PARA CONSEGUIR FAZER DE 400 A 500 POR DIA
-▶Quanto maior o valor de depósito + você consegue lucrar
-
-    👇 PLATAFORMA QUE MAIS PAGA 👇
-➡ https://fwd.cx/lvndeS58ksIX
-
-🎰 Qual jogo você pode usar?
-Fortune Tiger 🐯,
-Fortune Rabbit 🐰
-Fortune Ox 🐂
-Fortune Mouse 🐭
-
-📣‼Casa de aposta Realsbet ✅ ‼📣
+Tigre,Touro,Rato,Coelho,Dragão 
+➖➖➖➖➖➖➖➖➖➖➖➖
 ${randomTimes}
 
-🐌 4x Normal 
-⚡ 7x Turbo 
+🐌 13x Normal 
+⚡ 8  xTurbo
 
-Sinais enviados AO VIVO por mim Yuri Analista de jogos de slots. 📊💲⚠🤑
-
-➖➖➖➖➖➖➖➖➖➖➖
-🔔 FAZER O CADASTRO DENTRO DA CASA DE APOSTA 👇🏻
-
-➡ https://fwd.cx/lvndeS58ksIX`;
-
-            const signalImageJunto = MessageMedia.fromFilePath(
-                SIGNAL_JUNTO_IMAGE_PATH
-            );
+✅ CADASTRE-SE PARA JOGAR
+➡ https://bit.ly/Cadastre-se_Contavip`;
 
             // Enviar a mensagem com as menções
             client
-                .sendMessage(chatId, signalImageJunto, {
+                .sendMessage(chatId, {
                     caption: message,
                     mentions: mentions,
                 })
@@ -167,14 +130,28 @@ function generateRandomTimes() {
 
     while (currentTime.isBefore(endTime)) {
         let timeString = currentTime.format("HH:mm"); // Formatar o horário atual
-        times.push(`✅⏰ ${timeString}`);
+        times.push(`⏰💲 ${timeString}`);
         currentTime.add(getRandomInt(7, 9), "minutes"); // Adicionar um intervalo aleatório de 7 a 9 minutos
     }
 
-    return times.join("\n");
+    // Criar pares de horários e organizá-los em linhas
+    let pairedTimes = [];
+    for (let i = 0; i < times.length; i += 2) {
+        // Se houver um número ímpar de horários, adicione o último sozinho
+        if (i + 1 === times.length) {
+            pairedTimes.push(times[i]);
+        } else {
+            pairedTimes.push(`${times[i]} | ${times[i + 1]}`);
+        }
+    }
+
+    // Juntar os pares de horários com uma quebra de linha entre eles
+    return pairedTimes.join("\n");
 }
 
 function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -193,7 +170,7 @@ function sendEndOfDayMessage(chatId) {
     
     PASSO 1: SE CADASTRE NA CASA DE APOSTAS:
     
-    ➡ https://fwd.cx/lvndeS58ksIX
+    ➡ https://bit.ly/Cadastre-se_Contavip
     
     PASSO 2: DEPOSITE A PARTIR DE R$ 30,00
     
@@ -263,12 +240,14 @@ client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
-// client.on('ready', () => {
-//     console.log('Client is ready!');
-//     client.getChats().then(chats => {
-//         const groups = chats.filter(chat => chat.isGroup);
-//         groups.forEach(group => {
-//             console.log(`Group Name: ${group.name}, Group ID: ${group.id._serialized}`);
-//         });
-//     });
-// });
+client.on("ready", () => {
+    console.log("Client is ready!");
+    client.getChats().then((chats) => {
+        const groups = chats.filter((chat) => chat.isGroup);
+        groups.forEach((group) => {
+            console.log(
+                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+            );
+        });
+    });
+});
