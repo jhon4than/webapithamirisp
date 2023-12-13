@@ -3,7 +3,25 @@ const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 const schedule = require("node-schedule");
 const moment = require("moment-timezone");
 const botActive = { value: true };
+let startDate = new Date(); // Data de início do bot
 
+function checkIfShouldPause() {
+    let currentDate = new Date();
+    let timeDiff = currentDate - startDate;
+    let daysPassed = timeDiff / (1000 * 60 * 60 * 24); // Convertendo de milissegundos para dias
+
+    if (daysPassed >= 30) {
+        console.log("30 dias passaram, bot está agora em pausa.");
+        botActive.value = false;
+        // Aqui você pode limpar todos os agendamentos ou intervalos que o bot esteja utilizando
+    } else {
+        // Reagendar a verificação para o próximo dia
+        setTimeout(checkIfShouldPause, 24 * 60 * 60 * 1000); // 24 horas em milissegundos
+    }
+}
+
+// Inicia a primeira verificação
+setTimeout(checkIfShouldPause, 24 * 60 * 60 * 1000);
 const GROUP_ID = "120363207227880718@g.us";
 
 const client = new Client({
@@ -15,12 +33,6 @@ client.initialize();
 client.on("ready", () => {
     console.log("Bot Online!");
     scheduleSignals();
-    
-    // Agendar a "pausa" para 30 dias a partir de agora
-    setTimeout(() => {
-        console.log("Bot está agora em pausa.");
-        botActive.value = false;
-    }, 30 * 24 * 60 * 60 * 1000); // 30 dias em milissegundos
 });
 
 
