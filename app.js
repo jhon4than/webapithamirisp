@@ -26,8 +26,8 @@ function scheduleSignals() {
     const signalTimes = [
         { hour: 9, minute: 2 },
         { hour: 13, minute: 2 },
-        { hour: 18, minute: 5 },
-        { hour: 21, minute: 25 },
+        { hour: 17, minute: 5 },
+        { hour: 20, minute: 25 },
     ];
 
     signalTimes.forEach((time) => {
