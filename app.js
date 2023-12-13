@@ -3,7 +3,7 @@ const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 const schedule = require("node-schedule");
 const moment = require("moment-timezone");
 
-const GROUP_ID = "120363199599521035@g.us";
+const GROUP_ID = "120363207227880718@g.us";
 const SIGNAL_IMAGE_PATH = "./sinal.jpg"; // Caminho para a imagem do sinal
 
 const client = new Client({
@@ -12,10 +12,10 @@ const client = new Client({
 
 client.initialize();
 
-// client.on("ready", () => {
-//     console.log("Bot Online!");
-//     scheduleSignals(); // Agendar os sinais regulares para serem enviados
-// });
+client.on("ready", () => {
+    console.log("Bot Online!");
+    scheduleSignals(); // Agendar os sinais regulares para serem enviados
+});
 
 function scheduleSignals() {
     console.log(
@@ -240,14 +240,14 @@ client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
-client.on("ready", () => {
-    console.log("Client is ready!");
-    client.getChats().then((chats) => {
-        const groups = chats.filter((chat) => chat.isGroup);
-        groups.forEach((group) => {
-            console.log(
-                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-            );
-        });
-    });
-});
+// client.on("ready", () => {
+//     console.log("Client is ready!");
+//     client.getChats().then((chats) => {
+//         const groups = chats.filter((chat) => chat.isGroup);
+//         groups.forEach((group) => {
+//             console.log(
+//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+//             );
+//         });
+//     });
+// });
