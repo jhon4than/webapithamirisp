@@ -4,7 +4,6 @@ const schedule = require("node-schedule");
 const moment = require("moment-timezone");
 
 const GROUP_ID = "120363207227880718@g.us";
-const SIGNAL_IMAGE_PATH = "./sinal.jpg"; // Caminho para a imagem do sinal
 
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -18,80 +17,48 @@ client.on("ready", () => {
 });
 
 function scheduleSignals() {
-    console.log(
-        "Agendando sinais para horários específicos com minutos definidos."
-    );
+    console.log("Agendando sinais para horários específicos com minutos definidos.");
 
-    // Horários em que os sinais serão enviados, no horário de Brasília
     const signalTimes = [
         { hour: 9, minute: 2 },
         { hour: 13, minute: 2 },
-        { hour: 17, minute: 5 },
-        { hour: 20, minute: 25 },
+        { hour: 18, minute: 15 },
+        { hour: 23, minute: 25 }, // Não precisa mais verificar se é antes das 23h
     ];
 
     signalTimes.forEach((time) => {
-        // Converte o horário de Brasília para o fuso horário local do servidor
         const timeInLocal = moment
             .tz({ hour: time.hour, minute: time.minute }, "America/Sao_Paulo")
             .local();
 
-        // Verifica se o horário é antes das 23 horas
-        if (timeInLocal.hour() < 23) {
-            console.log(timeInLocal);
-            schedule.scheduleJob(
-                {
-                    hour: timeInLocal.get("hour"),
-                    minute: timeInLocal.get("minute"),
-                },
-                function () {
-                    console.log(
-                        `Enviando sinal para ${time.hour}:${time.minute} BRT.`
-                    );
-                    sendSignal(GROUP_ID);
-                }
-            );
-        }
+        console.log(timeInLocal);
+        schedule.scheduleJob(
+            {
+                hour: timeInLocal.get("hour"),
+                minute: timeInLocal.get("minute"),
+            },
+            function () {
+                console.log(`Enviando sinal para ${time.hour}:${time.minute} BRT.`);
+                sendSignal(GROUP_ID);
+            }
+        );
     });
-
-    // Agendar a mensagem de finalização para as 23 horas de Brasília
-    const endOfDayInLocal = moment
-        .tz({ hour: 23, minute: 0 }, "America/Sao_Paulo")
-        .local();
-
-    schedule.scheduleJob(
-        {
-            hour: endOfDayInLocal.get("hour"),
-            minute: endOfDayInLocal.get("minute"),
-        },
-        function () {
-            console.log("Enviando mensagem de finalização do dia.");
-            sendEndOfDayMessage(GROUP_ID);
-        }
-    );
 }
 
 function sendSignal(chatId) {
-    setTimeout(() => {
+   
         sendMinutePayingMessage(chatId);
-    }, 1000); // Aguarda um segundo após a mensagem de pré-sinal para enviar a imagem
+   
 }
 
 function sendMinutePayingMessage(chatId) {
-    client
-        .getChatById(chatId)
-        .then((chat) => {
-            const mentions = chat.participants
-                .filter((participant) => !participant.isMe) // Filtrar o próprio bot
-                .map((participant) => participant.id._serialized); // Mapear para uma lista de IDs serializados
-
-            const randomTimes = generateRandomTimes();
-            const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!*🚨
+    const randomTimes = generateRandomTimes();
+    const message = `🚨 *ATENÇÃO NOS MINUTOS PAGANTES!*🚨
 HORÁRIO DE BRASÍLIA
 ✅SINAL VALIDO SOMENTE DENTRO DO MINUTO✅
-➖➖➖➖➖➖➖➖➖➖➖➖
+➖➖➖➖➖➖➖➖➖➖➖
 Tigre,Touro,Rato,Coelho,Dragão 
-➖➖➖➖➖➖➖➖➖➖➖➖
+➖➖➖➖➖➖➖➖➖➖➖
 ${randomTimes}
 
 🐌 13x Normal 
@@ -100,28 +67,16 @@ ${randomTimes}
 ✅ CADASTRE-SE PARA JOGAR
 ➡ https://bit.ly/Cadastre-se_Contavip`;
 
-            // Enviar a mensagem com as menções
-            client
-                .sendMessage(chatId, {
-                    caption: message,
-                    mentions: mentions,
-                })
-                .then(() => {
-                    console.log(
-                        "Mensagem de minutos pagantes enviada com menções."
-                    );
-                })
-                .catch((err) =>
-                    console.error(
-                        "Erro ao enviar mensagem de minutos pagantes:",
-                        err
-                    )
-                );
+    // Enviar a mensagem de texto simples
+    client.sendMessage(chatId, message)
+        .then(() => {
+            console.log("Mensagem de minutos pagantes enviada.");
         })
-        .catch((err) =>
-            console.error("Erro ao obter chat para minutos pagantes:", err)
-        );
+        .catch((err) => {
+            console.error("Erro ao enviar mensagem de minutos pagantes:", err);
+        });
 }
+
 
 function generateRandomTimes() {
     let times = [];
@@ -134,20 +89,21 @@ function generateRandomTimes() {
         currentTime.add(getRandomInt(7, 9), "minutes"); // Adicionar um intervalo aleatório de 7 a 9 minutos
     }
 
+    // Se a quantidade de horários for ímpar, remover o último horário
+    if (times.length % 2 !== 0) {
+        times.pop();
+    }
+
     // Criar pares de horários e organizá-los em linhas
     let pairedTimes = [];
     for (let i = 0; i < times.length; i += 2) {
-        // Se houver um número ímpar de horários, adicione o último sozinho
-        if (i + 1 === times.length) {
-            pairedTimes.push(times[i]);
-        } else {
-            pairedTimes.push(`${times[i]} | ${times[i + 1]}`);
-        }
+        pairedTimes.push(`${times[i]} | ${times[i + 1]}`);
     }
 
     // Juntar os pares de horários com uma quebra de linha entre eles
     return pairedTimes.join("\n");
 }
+
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -164,7 +120,7 @@ function formatTime(minutes) {
 }
 
 function sendEndOfDayMessage(chatId) {
-    const endOfDayMessage = `✅🔥 FINALIZAMOS MAIS UM TURNO POSITIVOOOOOOO!!!
+    const endOfDayMessage = `✅🔥 FINALIZAMOS MAIS UM DIA POSITIVOOOOOOO!!!
 
     💰COMO PEGAR NOSSOS SINAIS E FAZER DE R$ 100 A R$ 500 POR DIA💰
     
@@ -236,9 +192,9 @@ function generateTwoRandomTimes() {
     return [{ hour: randomHour, minute: randomMinute }];
 }
 
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//     qrcode.generate(qr, { small: true });
+// });
 
 // client.on("ready", () => {
 //     console.log("Client is ready!");
