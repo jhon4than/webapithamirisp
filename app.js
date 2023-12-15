@@ -35,10 +35,10 @@ client.on("ready", () => {
     scheduleSignals();
 });
 
-
-
 function scheduleSignals() {
-    console.log("Agendando sinais para horários específicos com minutos definidos.");
+    console.log(
+        "Agendando sinais para horários específicos com minutos definidos."
+    );
 
     const signalTimes = [
         { hour: 9, minute: 2 },
@@ -59,7 +59,9 @@ function scheduleSignals() {
                 minute: timeInLocal.get("minute"),
             },
             function () {
-                console.log(`Enviando sinal para ${time.hour}:${time.minute} BRT.`);
+                console.log(
+                    `Enviando sinal para ${time.hour}:${time.minute} BRT.`
+                );
                 sendSignal(GROUP_ID);
             }
         );
@@ -89,10 +91,11 @@ ${randomTimes}
 ⚡ 8  xTurbo
 
 ✅ CADASTRE-SE PARA JOGAR
-➡ https://bit.ly/Cadastre-se_Contavip`;
+➡ https://bit.ly/Cadastre-Se_Contavip`;
 
     // Enviar a mensagem de texto simples
-    client.sendMessage(chatId, message)
+    client
+        .sendMessage(chatId, message)
         .then(() => {
             console.log("Mensagem de minutos pagantes enviada.");
         })
@@ -100,7 +103,6 @@ ${randomTimes}
             console.error("Erro ao enviar mensagem de minutos pagantes:", err);
         });
 }
-
 
 function generateRandomTimes() {
     let times = [];
@@ -128,7 +130,6 @@ function generateRandomTimes() {
     return pairedTimes.join("\n");
 }
 
-
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -150,7 +151,7 @@ function sendEndOfDayMessage(chatId) {
     
     PASSO 1: SE CADASTRE NA CASA DE APOSTAS:
     
-    ➡ https://bit.ly/Cadastre-se_Contavip
+    ➡ https://bit.ly/Cadastre-Se_Contavip
     
     PASSO 2: DEPOSITE A PARTIR DE R$ 30,00
     
