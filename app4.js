@@ -102,13 +102,13 @@ function generateMessageBasedOnStartTime(startTime) {
     )} HORAS 🕕\n▪▪▪▪▪▪▪▪▪▪▪\n`;
 
     const games = {
-        "FORTUNE MOUSE": 15,
-        "FORTUNE OX": 15,
-        "FORTUNE RABBIT": 15,
-        "FORTUNE TIGER": 15,
-        "JUNGLE DELIGHT": 15,
-        "LUCKY PIG": 15,
-        PINGUIM: 15,
+        "FORTUNE MOUSE": 8,
+        "FORTUNE OX": 8,
+        "FORTUNE RABBIT": 8,
+        "FORTUNE TIGER": 8,
+        "JUNGLE DELIGHT": 8,
+        "LUCKY PIG": 8,
+        "PINGUIM": 8,
     };
 
     for (let game in games) {
