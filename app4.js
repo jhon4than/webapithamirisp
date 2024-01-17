@@ -42,21 +42,6 @@ function sendRandomSignal(chatId, imagePath) {
 // Função para agendar sinais
 function scheduleSignals() {
     console.log("Agendando sinais com base na hora programada.");
-
-    // Agendando o primeiro sinal para 3 minutos após o horário atual
-    const firstSignalTime = moment().tz("America/Sao_Paulo").add(3, "minutes");
-    console.log(
-        `Agendado primeiro sinal para ${firstSignalTime.format("HH:mm")} BRT.`
-    );
-    schedule.scheduleJob(firstSignalTime.toDate(), function () {
-        console.log(
-            `Enviando primeiro sinal para ${firstSignalTime.format(
-                "HH:mm"
-            )} BRT.`
-        );
-        sendSignal(GROUP_ID, firstSignalTime);
-    });
-
     // Agendando os demais sinais conforme definido em signalHours
     const signalHours = [
         { hour: 9, minute: 0 },
@@ -67,6 +52,8 @@ function scheduleSignals() {
         { hour: 19, minute: 0 },
         { hour: 21, minute: 0 },
         { hour: 23, minute: 5 },
+        { hour: 3, minute: 0 },
+        { hour: 6, minute: 0 },
     ];
 
     signalHours.forEach((timeObj) => {
