@@ -38,7 +38,7 @@ client.on("ready", () => {
 function scheduleSignals() {
     console.log("Agendando sinais para horários específicos com minutos aleatórios.");
 
-    const signalHours = [9, 13, 18, 23]; // Horas em que os sinais serão enviados
+    const signalHours = [11, 15, 18, 23]; // Horas em que os sinais serão enviados
 
     signalHours.forEach((hour) => {
         // Gera um número aleatório entre 0 e 59 para os minutos
@@ -212,9 +212,9 @@ function generateTwoRandomTimes() {
     return [{ hour: randomHour, minute: randomMinute }];
 }
 
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//     qrcode.generate(qr, { small: true });
+// });
 
 // client.on("ready", () => {
 //     console.log("Client is ready!");
