@@ -66,7 +66,7 @@ function scheduleSignals() {
         { hour: 17, minute: 0 },
         { hour: 19, minute: 0 },
         { hour: 21, minute: 0 },
-        { hour: 23, minute: 0 },
+        { hour: 23, minute: 5 },
     ];
 
     signalHours.forEach((timeObj) => {
@@ -167,19 +167,19 @@ client.on("ready", () => {
     checkIfShouldPause(); // Inicia a verificação de pausa
 });
 
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//     qrcode.generate(qr, { small: true });
+// });
 
-// Opcional: código para listar grupos
-client.on("ready", () => {
-    console.log("Client is ready!");
-    client.getChats().then((chats) => {
-        const groups = chats.filter((chat) => chat.isGroup);
-        groups.forEach((group) => {
-            console.log(
-                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-            );
-        });
-    });
-});
+// // Opcional: código para listar grupos
+// client.on("ready", () => {
+//     console.log("Client is ready!");
+//     client.getChats().then((chats) => {
+//         const groups = chats.filter((chat) => chat.isGroup);
+//         groups.forEach((group) => {
+//             console.log(
+//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+//             );
+//         });
+//     });
+// });
