@@ -5,8 +5,10 @@ const moment = require("moment-timezone");
 
 const botActive = { value: true };
 let startDate = new Date(); // Data de início do bot
-const GROUP_ID = "120363164051478387@g.us";
-
+const GROUP_IDS = [
+    "120363164051478387@g.us", // ID do Grupo 1
+    "120363219756067105@g.us", // ID do Grupo 2
+];
 // Funções auxiliares
 function checkIfShouldPause() {
     let currentDate = new Date();
@@ -73,15 +75,19 @@ function scheduleSignals() {
             console.log(
                 `Enviando sinal para ${scheduledTime.format("HH:mm")} BRT.`
             );
-            sendSignal(GROUP_ID, scheduledTime);
+            sendSignal(GROUP_IDS, scheduledTime);
         });
     });
 }
 
-// Função para enviar sinal
-function sendSignal(chatId, scheduledTime) {
+function sendSignal(groupIds, scheduledTime) {
     if (botActive.value) {
-        sendMinutePayingMessage(chatId, scheduledTime);
+        groupIds.forEach((chatId, index) => {
+            // Adicionando um atraso de 5 segundos multiplicado pelo índice do grupo
+            setTimeout(() => {
+                sendMinutePayingMessage(chatId, scheduledTime);
+            }, 5000 * index); // 5000 milissegundos = 5 segundos
+        });
     } else {
         console.log("Bot está pausado e não pode enviar sinais.");
     }
@@ -102,20 +108,20 @@ function generateMessageBasedOnStartTime(startTime) {
     )} HORAS 🕕\n▪▪▪▪▪▪▪▪▪▪▪\n`;
 
     const games = {
-        "FORTUNE MOUSE": 8,
-        "FORTUNE OX": 8,
-        "FORTUNE RABBIT": 8,
-        "FORTUNE TIGER": 8,
-        "JUNGLE DELIGHT": 8,
-        "LUCKY PIG": 8,
-        "PINGUIM": 8,
+        "FORTUNE MOUSE": 15,
+        "FORTUNE OX": 15,
+        "FORTUNE RABBIT": 15,
+        "FORTUNE TIGER": 15,
+        "JUNGLE DELIGHT": 15,
+        "LUCKY PIG": 15,
+        PINGUIM: 15,
     };
 
     for (let game in games) {
         message += `🔰${game}⤵\n`;
         let signalTime = startTime.clone();
         for (let i = 0; i < games[game]; i++) {
-            let timeIncrement = getRandomInt(5, 10); // Intervalo aleatório entre 5 e 10 minutos
+            let timeIncrement = getRandomInt(9, 15); // Intervalo aleatório entre 5 e 10 minutos
             message += `⏰${signalTime.format("HH:mm")}\n`;
             signalTime.add(timeIncrement, "minutes");
         }
@@ -158,15 +164,15 @@ client.on("ready", () => {
 //     qrcode.generate(qr, { small: true });
 // });
 
-// // Opcional: código para listar grupos
-// client.on("ready", () => {
-//     console.log("Client is ready!");
-//     client.getChats().then((chats) => {
-//         const groups = chats.filter((chat) => chat.isGroup);
-//         groups.forEach((group) => {
-//             console.log(
-//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-//             );
-//         });
-//     });
-// });
+// Opcional: código para listar grupos
+client.on("ready", () => {
+    console.log("Client is ready!");
+    client.getChats().then((chats) => {
+        const groups = chats.filter((chat) => chat.isGroup);
+        groups.forEach((group) => {
+            console.log(
+                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+            );
+        });
+    });
+});
