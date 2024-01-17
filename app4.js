@@ -5,7 +5,7 @@ const moment = require("moment-timezone");
 
 const botActive = { value: true };
 let startDate = new Date(); // Data de início do bot
-const GROUP_ID = "120363214348020444@g.us";
+const GROUP_ID = "120363164051478387@g.us";
 
 // Funções auxiliares
 function checkIfShouldPause() {
@@ -171,13 +171,15 @@ client.on("qr", (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
-// // Opcional: código para listar grupos
-// client.on("ready", () => {
-//     console.log("Client is ready!");
-//     client.getChats().then((chats) => {
-//         const groups = chats.filter((chat) => chat.isGroup);
-//         groups.forEach((group) => {
-//             console.log(`Group Name: ${group.name}, Group ID: ${group.id._serialized}`);
-//         });
-//     });
-// });
+// Opcional: código para listar grupos
+client.on("ready", () => {
+    console.log("Client is ready!");
+    client.getChats().then((chats) => {
+        const groups = chats.filter((chat) => chat.isGroup);
+        groups.forEach((group) => {
+            console.log(
+                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+            );
+        });
+    });
+});
