@@ -7,7 +7,7 @@ const botActive = { value: true };
 let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
-    "120363219756067105@g.us", // ID do Grupo 2
+    "120363185715138412@g.us", // ID do Grupo 2
 ];
 // Funções auxiliares
 function checkIfShouldPause() {
@@ -164,15 +164,15 @@ client.on("ready", () => {
 //     qrcode.generate(qr, { small: true });
 // });
 
-// Opcional: código para listar grupos
-client.on("ready", () => {
-    console.log("Client is ready!");
-    client.getChats().then((chats) => {
-        const groups = chats.filter((chat) => chat.isGroup);
-        groups.forEach((group) => {
-            console.log(
-                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-            );
-        });
-    });
-});
+// // Opcional: código para listar grupos
+// client.on("ready", () => {
+//     console.log("Client is ready!");
+//     client.getChats().then((chats) => {
+//         const groups = chats.filter((chat) => chat.isGroup);
+//         groups.forEach((group) => {
+//             console.log(
+//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+//             );
+//         });
+//     });
+// });
