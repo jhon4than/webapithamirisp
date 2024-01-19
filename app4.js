@@ -8,6 +8,7 @@ let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
     "120363185715138412@g.us", // ID do Grupo 2
+    "120363209853618580@g.us", // ID do Grupo 2
 ];
 // Funções auxiliares
 function checkIfShouldPause() {
