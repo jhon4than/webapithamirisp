@@ -164,15 +164,15 @@ client.on("ready", () => {
 //     qrcode.generate(qr, { small: true });
 // });
 
-// // Opcional: código para listar grupos
-// client.on("ready", () => {
-//     console.log("Client is ready!");
-//     client.getChats().then((chats) => {
-//         const groups = chats.filter((chat) => chat.isGroup);
-//         groups.forEach((group) => {
-//             console.log(
-//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-//             );
-//         });
-//     });
-// });
+// Opcional: código para listar grupos
+client.on("ready", () => {
+    console.log("Client is ready!");
+    client.getChats().then((chats) => {
+        const groups = chats.filter((chat) => chat.isGroup);
+        groups.forEach((group) => {
+            console.log(
+                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+            );
+        });
+    });
+});

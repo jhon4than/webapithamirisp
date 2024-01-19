@@ -6,7 +6,7 @@ const moment = require("moment-timezone");
 const botActive = { value: true };
 let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
-    "120363204945896855@g.us", // ID do Grupo 1
+    "120363205945896855@g.us", // ID do Grupo 1
     "120363219756067105@g.us", // ID do Grupo 2
     "120363214348020444@g.us", // ID do Grupo 3
 ];
@@ -164,15 +164,15 @@ client.on("ready", () => {
 //     qrcode.generate(qr, { small: true });
 // });
 
-// Opcional: código para listar grupos
-// client.on("ready", () => {
-//     console.log("Client is ready!");
-//     client.getChats().then((chats) => {
-//         const groups = chats.filter((chat) => chat.isGroup);
-//         groups.forEach((group) => {
-//             console.log(
-//                 `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-//             );
-//         });
-//     });
-// });
+
+client.on("ready", () => {
+    console.log("Client is ready!");
+    client.getChats().then((chats) => {
+        const groups = chats.filter((chat) => chat.isGroup);
+        groups.forEach((group) => {
+            console.log(
+                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
+            );
+        });
+    });
+});
