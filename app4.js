@@ -103,7 +103,7 @@ function sendMinutePayingMessage(chatId, startTime) {
 }
 function generateMessageBasedOnStartTime(startTime) {
     const nextTime = startTime.clone().add(2, "hours");
-    let message = `SINAIS 10x🎰\n\nLINK DA PLATAFORMA FIXADO🚨⤴🍀\n\nJoguem com consciência!🍀💰\n▪▪▪▪▪▪▪▪▪▪▪\n⏰MINUTOS PAGANTES⏰\n🕕 ${startTime.format(
+    let message = `Horários Pagantes🎰\n\nLINK DA PLATAFORMA FIXADO🚨⤴🍀\n\nJoguem com consciência!🍀💰\n▪▪▪▪▪▪▪▪▪▪▪\n⏰MINUTOS PAGANTES⏰\n🕕 ${startTime.format(
         "HH:mm"
     )} HORAS 🕕\n▪▪▪▪▪▪▪▪▪▪▪\n`;
 
