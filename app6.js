@@ -103,38 +103,9 @@ function sendMinutePayingMessage(chatId, startTime) {
         .then(() => console.log("Mensagem de minutos pagantes enviada."))
         .catch((err) => console.error("Erro ao enviar mensagem:", err));
 }
+
 function generateMessageBasedOnStartTime(startTime) {
-    const nextTime = startTime.clone().add(2, "hours");
-    let message = `Mestres das Dicas🎰\n\nLINK DA PLATAFORMA FIXADO🚨⤴🍀\n\nJoguem com consciência!🍀💰\n▪▪▪▪▪▪▪▪▪▪▪\n⏰MINUTOS PAGANTES⏰\n🕕 ${startTime.format(
-        "HH:mm"
-    )} HORAS 🕕\n▪▪▪▪▪▪▪▪▪▪▪\n`;
-
-    const games = {
-        "FORTUNE MOUSE": 8,
-        "FORTUNE OX": 8,
-        "FORTUNE RABBIT": 8,
-        "FORTUNE TIGER": 8,
-        "JUNGLE DELIGHT": 8,
-        "LUCKY PIG": 8,
-        PINGUIM: 8,
-    };
-
-    for (let game in games) {
-        message += `🔰${game}⤵\n`;
-        let signalTime = startTime.clone();
-        for (let i = 0; i < games[game]; i++) {
-            let timeIncrement = getRandomInt(9, 18); // Intervalo aleatório entre 5 e 10 minutos
-            message += `⏰${signalTime.format("HH:mm")}\n`;
-            signalTime.add(timeIncrement, "minutes");
-        }
-        message += `▪▪▪▪▪▪▪▪▪▪▪\n`;
-    }
-
-    message +=
-        "⚠ Deu 4 ou 5 giros máximo com bet mínima de forma manual e INTERCALANDO e o jogo não te pagou um valor superior aos da suas apostas? Saia da plataforma IMEDIATAMENTE!\n🍀 BOA SORTE! 🍀\n▪▪▪▪▪▪▪▪▪▪▪";
-
-    console.log(message);
-    return message;
+    // ... código anterior para gerar a mensagem ...
 }
 
 function getRandomInt(min, max) {
@@ -162,18 +133,30 @@ client.on("ready", () => {
     checkIfShouldPause(); // Inicia a verificação de pausa
 });
 
-// client.on("qr", (qr) => {
-//     qrcode.generate(qr, { small: true });
-// });
+// Adicione tratamento de erros para evitar que o bot pare completamente em caso de falha
+client.on("auth_failure", () => {
+    console.error("Falha na autenticação do cliente WhatsApp.");
+    // Você pode adicionar aqui ações para tentar reconectar ou notificar um administrador.
+});
 
-client.on("ready", () => {
-    console.log("Client is ready!");
-    client.getChats().then((chats) => {
-        const groups = chats.filter((chat) => chat.isGroup);
-        groups.forEach((group) => {
-            console.log(
-                `Group Name: ${group.name}, Group ID: ${group.id._serialized}`
-            );
-        });
-    });
+client.on("disconnected", (reason) => {
+    console.error(`Cliente WhatsApp desconectado. Motivo: ${reason}`);
+    // Você pode adicionar aqui ações para tentar reconectar ou notificar um administrador.
+});
+
+// Clientes WhatsApp
+client.on("qr", (qr) => {
+    qrcode.generate(qr, { small: true });
+});
+
+client.on("message", (message) => {
+    // Lide com as mensagens recebidas conforme necessário
+});
+
+client.on("group_join", (notification) => {
+    // Lide com eventos de entrada em grupos
+});
+
+client.on("group_leave", (notification) => {
+    // Lide com eventos de saída de grupos
 });

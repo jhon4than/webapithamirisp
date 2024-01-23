@@ -8,7 +8,7 @@ let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
     "120363185715138412@g.us", // ID do Grupo 2
-    "120363209853618580@g.us", // ID do Grupo 2
+    "120363185715138412@g.us", // ID do Grupo 2
 ];
 // Funções auxiliares
 function checkIfShouldPause() {
@@ -159,6 +159,12 @@ client.on("ready", () => {
     console.log("Bot Online!");
     scheduleSignals();
     checkIfShouldPause(); // Inicia a verificação de pausa
+
+    // Adicionando o setInterval aqui
+    setInterval(() => {
+        console.log("Reiniciando o bot para limpeza de memória.");
+        process.exit(0); // Reinicia o processo
+    }, 86400000); // Reinicia o bot a cada 24 horas
 });
 
 // client.on("qr", (qr) => {
