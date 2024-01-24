@@ -50,7 +50,7 @@ function scheduleSignals() {
         { hour: 9, minute: 0 },
         { hour: 11, minute: 0 },
         { hour: 13, minute: 0 },
-        { hour: 15, minute: 35 },
+        { hour: 15, minute: 40 },
         { hour: 17, minute: 0 },
         { hour: 19, minute: 0 },
         { hour: 21, minute: 0 },
