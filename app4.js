@@ -8,7 +8,6 @@ let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
     "120363185715138412@g.us", // ID do Grupo 2
-    "120363209853618580@g.us", // ID do Grupo 2
 ];
 
 // Funções auxiliares
@@ -126,12 +125,21 @@ function sendMinutePayingMessage(chatId, startTime) {
         const message = generateMessageBasedOnStartTime(startTime);
         client
             .sendMessage(chatId, message)
-            .then(() => console.log("Mensagem de minutos pagantes enviada."))
             .catch((err) => console.error("Erro ao enviar mensagem:", err));
     } catch (error) {
         console.error("Erro em sendMinutePayingMessage:", error);
     }
 }
+
+function sendMegaSlotsMessage(chatId) {
+    try {
+        const megaSlotsMessage = `🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨\n🎯LANÇAMENTO DA REDE MEGA SLOTS 🥳🥳🤑\n\nhttps://m.vinicius777slots.com/?gfs=lj586kfa\n\n✅Depósito mínimo de 20,00\n✅Saque a partir de 50,00\nSaque diário de acordo com o VIP\n🍀Bora faturar que a 777 da show sempree\n🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀`;
+        client.sendMessage(chatId, megaSlotsMessage);
+    } catch (error) {
+        console.error("Erro em sendMegaSlotsMessage:", error);
+    }
+}
+
 
 function generateMessageBasedOnStartTime(startTime) {
     try {
@@ -195,20 +203,14 @@ client.on("ready", () => {
         console.log("Bot Online!");
         scheduleSignals();
         checkIfShouldPause(); // Inicia a verificação de pausa
-
-        // Adicionando o setInterval aqui
-        setInterval(() => {
-            console.log("Reiniciando o bot para limpeza de memória.");
-            process.exit(0); // Reinicia o processo
-        }, 86400000); // Reinicia o bot a cada 24 horas
     } catch (error) {
         console.error("Erro em cliente.on('ready'):", error);
     }
 });
 
-// client.on("qr", (qr) => {
-//     qrcode.generate(qr, { small: true });
-// });
+client.on("qr", (qr) => {
+    qrcode.generate(qr, { small: true });
+});
 
 // Opcional: código para listar grupos
 client.on("ready", () => {
