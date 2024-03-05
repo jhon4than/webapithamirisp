@@ -120,7 +120,6 @@ function sendSignal(groupIds, scheduledTime) {
     }
 }
 
-
 // Função para gerar a mensagem com sinais sequenciais
 function sendMinutePayingMessage(chatId, startTime) {
     try {
@@ -141,7 +140,6 @@ function sendMegaSlotsMessage(chatId) {
         console.error("Erro em sendMegaSlotsMessage:", error);
     }
 }
-
 
 function generateMessageBasedOnStartTime(startTime) {
     try {
@@ -210,9 +208,9 @@ client.on("ready", () => {
     }
 });
 
-// client.on("qr", (qr) => {
-//     qrcode.generate(qr, { small: true });
-// });
+client.on("qr", (qr) => {
+    qrcode.generate(qr, { small: true });
+});
 
 // Opcional: código para listar grupos
 client.on("ready", () => {
