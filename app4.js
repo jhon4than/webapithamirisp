@@ -210,9 +210,9 @@ client.on("ready", () => {
     }
 });
 
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
+// client.on("qr", (qr) => {
+//     qrcode.generate(qr, { small: true });
+// });
 
 // Opcional: código para listar grupos
 client.on("ready", () => {
