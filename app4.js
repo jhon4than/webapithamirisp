@@ -67,7 +67,7 @@ function scheduleSignals() {
         // Agendando os demais sinais conforme definido em signalHours
         const signalHours = [
             { hour: 9, minute: 0 },
-            { hour: 11, minute: 30 },
+            { hour: 11, minute: 45 },
             { hour: 13, minute: 0 },
             { hour: 15, minute: 40 },
             { hour: 17, minute: 0 },
