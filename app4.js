@@ -107,10 +107,10 @@ function sendSignal(groupIds, scheduledTime) {
     try {
         if (botActive.value) {
             groupIds.forEach((chatId, index) => {
-                // Adicionando um atraso de 5 segundos multiplicado pelo índice do grupo
+                const delay = index * 5000; // Incremento de tempo para cada grupo
                 setTimeout(() => {
                     sendMinutePayingMessage(chatId, scheduledTime);
-                }, 5000 * index); // 5000 milissegundos = 5 segundos
+                }, delay);
             });
         } else {
             console.log("Bot está pausado e não pode enviar sinais.");
@@ -119,6 +119,7 @@ function sendSignal(groupIds, scheduledTime) {
         console.error("Erro em sendSignal:", error);
     }
 }
+
 
 // Função para gerar a mensagem com sinais sequenciais
 function sendMinutePayingMessage(chatId, startTime) {
