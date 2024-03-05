@@ -8,7 +8,7 @@ let startDate = new Date(); // Data de início do bot
 const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
     "120363185715138412@g.us", // ID do Grupo 2
-    "120363209853618580@g.us", // ID do Grupo 2
+    // "120363209853618580@g.us", // ID do Grupo 2
 ];
 
 // Funções auxiliares
@@ -72,7 +72,7 @@ function scheduleSignals() {
             { hour: 15, minute: 40 },
             { hour: 17, minute: 0 },
             { hour: 19, minute: 0 },
-            { hour: 21, minute: 0 },
+            { hour: 22, minute: 0 },
             { hour: 23, minute: 5 },
             { hour: 3, minute: 0 },
             { hour: 6, minute: 0 },
