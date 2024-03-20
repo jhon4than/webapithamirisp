@@ -9,6 +9,8 @@ const GROUP_IDS = [
     "120363164051478387@g.us", // ID do Grupo 1
     "120363185715138412@g.us", // ID do Grupo 2
     "120363209853618580@g.us", // ID do Grupo 2
+    "120363242331328544@g.us", // ID do Grupo 2
+    "120363205945896855@g.us", // ID do Grupo 2
 ];
 
 // Funções auxiliares
@@ -120,7 +122,6 @@ function sendSignal(groupIds, scheduledTime) {
     }
 }
 
-
 // Função para gerar a mensagem com sinais sequenciais
 function sendMinutePayingMessage(chatId, startTime) {
     try {
@@ -142,7 +143,6 @@ function sendMegaSlotsMessage(chatId) {
     }
 }
 
-
 function generateMessageBasedOnStartTime(startTime) {
     try {
         const nextTime = startTime.clone().add(2, "hours");
@@ -158,7 +158,7 @@ function generateMessageBasedOnStartTime(startTime) {
             "FORTUNE TIGER": 15,
             "JUNGLE DELIGHT": 15,
             "LUCKY PIG": 15,
-            "PINGUIM": 15,
+            PINGUIM: 15,
         };
 
         for (let game in games) {
