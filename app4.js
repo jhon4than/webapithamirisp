@@ -67,10 +67,10 @@ function scheduleSignals() {
         // Agendando os demais sinais conforme definido em signalHours
         const signalHours = [
             { hour: 9, minute: 0 },
-            { hour: 11, minute: 45 },
+            { hour: 11, minute: 0 },
             { hour: 13, minute: 0 },
-            { hour: 15, minute: 40 },
-            { hour: 17, minute: 0 },
+            { hour: 15, minute: 45 },
+            { hour: 17, minute: 43 },
             { hour: 19, minute: 0 },
             { hour: 22, minute: 0 },
             { hour: 23, minute: 5 },
@@ -151,13 +151,14 @@ function generateMessageBasedOnStartTime(startTime) {
         )} HORAS 🕕\n▪▪▪▪▪▪▪▪▪▪▪\n`;
 
         const games = {
+            "DRAGON TIGER": 15,
             "FORTUNE MOUSE": 15,
             "FORTUNE OX": 15,
             "FORTUNE RABBIT": 15,
             "FORTUNE TIGER": 15,
             "JUNGLE DELIGHT": 15,
             "LUCKY PIG": 15,
-            PINGUIM: 15,
+            "PINGUIM": 15,
         };
 
         for (let game in games) {
